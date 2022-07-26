@@ -47,24 +47,33 @@ function decode(expr) {
         '11': '-',
     }
 
+    // через цикл разбиваем строку по 10 символом
     for (let i = 0; i < expr.length; i += 10) {
         let decoderTens = expr.slice(i, i + 10);
-        if (decoderTens === '**********') {
-            decoderTens = ' ';
-        }
-        let letterInNum = [];
+
+        let doubleLetterInNum = [];
+        // проверка наличия пробела в строке
+        // условие: Space in string is **********.
+        // if (decoderTens === '**********') {
+        //     decoderTens = ' ';
+        // }
+
+        // созданную строку по 10 символов прогоняем циклом по 2 символа
         for (let i = 0; i < 10; i += 2) {
-            letterInNum.push(decoderTens.slice(i, i + 2));
+            // пушим по 2 символа в массив
+            doubleLetterInNum.push(decoderTens.slice(i, i + 2));
         }
-        transferInNum.push(letterInNum);
+        transferInNum.push(doubleLetterInNum);
     }
     // console.log(transferInNum)
 
     let transferInMorse = [];
 
-    for (let item of transferInNum) {
+    // проходим циклом по элементам созданного массива transferInMorse
+    for (let elem of transferInNum) {
         let morseLetter = '';
-        item.forEach(symbol => {
+        // смотрим символы и сравниваем с дефолтными
+        elem.forEach(symbol => {
             if (symbol in defaultSymbol) {
                 morseLetter += defaultSymbol[symbol];
             } else {
@@ -75,10 +84,14 @@ function decode(expr) {
     }
 
     let transfer = '';
+
     transferInMorse.forEach(symbol => {
+        // проверка символа в константе
         if (symbol in MORSE_TABLE) {
+            // при наличии такого символа, добавляем его значение в результат transfer
             transfer += MORSE_TABLE[symbol];
         } else {
+            // при отсутствии такого символа, добавляем пробул в результат transfer
             transfer += ' ';
         }
     });
